@@ -80,6 +80,7 @@ download_and_convert() {
 	case $server in
 		*.abclinuxu.cz) processor="abclinuxu.xsl" ;;
 		*.perceptualedge.com) processor="perceptualedge.xsl" ;;
+		*.prahaneznama.cz) processor="prahaneznama.xsl" ;;
 		*) ;;
 	esac
 	
