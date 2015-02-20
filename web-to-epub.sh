@@ -64,7 +64,9 @@ download_and_convert() {
 	echo2 "Current directory is `pwd`."
 	
 	echo1 "Downloading $1..."
-	wget -p -q -k -nd "$1"
+	if ! wget -p -q -k -nd "$1"; then
+		exit 1
+	fi
 	
 	filename=`basename "$1"`
 	if echo "$1" | grep -q '/$'; then
@@ -151,6 +153,10 @@ for url in "$@"; do
 		cd "$temp_dir"
 		download_and_convert "$url"
 	)
+	if [ $? -ne 0 ]; then
+		echo "Failed to download/convert $url"
+		continue
+	fi
 	BOOK_MD5=`md5sum "$temp_dir/BOOK.epub" | cut -f 1 '-d ' | cut -c 1-8`
 	FINAL_FILENAME=`cat "$temp_dir/TITLE.txt" | escape_filename`
 	FINAL_FILENAME="$TARGET_DIR/$FINAL_FILENAME-$BOOK_MD5.epub"
